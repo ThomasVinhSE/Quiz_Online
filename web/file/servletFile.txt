@@ -1,0 +1,12 @@
+LoginServlet=LoginServlet
+RegisterServlet=RegisterServlet
+LogOutServlet=LogOutServlet
+SearchServlet=SearchServlet?admin
+UpdateServlet=UpdateServlet?admin
+DeleteServlet=DeleteServlet?admin
+CreateServlet=CreateServlet?admin
+TakeQuizServlet=TakeQuizServlet?student
+SaveInforQuizServlet=SaveInforQuizServlet?student
+ExitQuizServlet=ExitQuizServlet?student
+SubmitServlet=SubmitServlet?student
+SearchHistoryServlet=SearchHistoryServlet?student

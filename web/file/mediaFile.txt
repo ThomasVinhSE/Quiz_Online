@@ -1,0 +1,12 @@
+framework/css/bootstrap.min.css.map
+framework/css/bootstrap.min.css
+framework/css/font-awesome.min.css
+framework/js/jquery-3.2.1.min.js
+framework/js/bootstrap.min.js
+framework/fonts/fontawesome-webfont.woff2
+framework/fonts/fontawesome-webfont.woff
+images/error.png
+images/bg.png
+images/background.jpg
+images/pencil.jpg
+

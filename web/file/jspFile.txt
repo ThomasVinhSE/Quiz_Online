@@ -1,0 +1,10 @@
+register.jsp=register.jsp
+login.jsp=login.jsp
+error.jsp=error.jsp
+adminHome.jsp=adminHome.jsp?admin
+manage.jsp=manage.jsp?admin
+create.jsp=create.jsp?admin
+update.jsp=update.jsp?admin
+delete.jsp=delete.jsp?admin
+home.jsp=home.jsp?student
+history.jsp=history.jsp?student
