@@ -76,7 +76,6 @@ public class SearchServlet extends HttpServlet {
                 String subjectName = request.getParameter("txtSubject");
                 String status = request.getParameter("txtStatus");
                 String txtIndex = request.getParameter("txtIndex");
-                System.out.println(txtQuestionName+"-"+subjectName+"-"+status+"-"+txtIndex);
                 boolean isValid = (txtQuestionName != null
                         && subjectName != null
                         && status != null 

@@ -10,7 +10,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>History Page</title>
+        <title>Detail Page</title>
         <link href="framework/css/bootstrap.min.css" rel="stylesheet">
         <link rel="stylesheet" href="framework/css/font-awesome.min.css">
         <style>
@@ -30,10 +30,9 @@
             function makeSearch()
             {
                 let historyId = document.getElementById('txtHistoryId').value;
-                let subject = document.getElementById('selectSubject').value;
 
                 historyId = historyId.trim().replace(/\s\s+/g, ' ');
-                window.location.replace("SearchHistoryServlet?btnAction=" + "&txtHistoryId=" + historyId + "&txtSubject=" + subject + "&txtIndex=" + index);
+                window.location.replace("ViewDetailServlet?btnAction=" + "&txtHistoryId=" + historyId + "&txtIndex=" + index+"&txtIndex2=${param.txtIndex2}"+"&txtSubject=${param.txtSubject}");
             }
             function focusTag()
             {
@@ -89,7 +88,7 @@
                     <a href="home.jsp">Home</a>
                 </li>
                 <li class="active">
-                    <a>History</a>
+                    <a>Detail</a>
                 </li>
                 <li>
                     <a href="LogOutServlet" >Log Out</a>
@@ -99,74 +98,35 @@
         <div class="main">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h3 class="panel-title"></h3>
+                    <h3 class="panel-title">Detail Of History : ${param.txtHistoryId}</h3>
                 </div>
                 <div class="panel-body" style="text-align: center;">
-                    <form action="SearchHistoryServlet" method="POST" class="form-inline">
-
-                        <div class="form-group">
-                            <div style="margin-right:30px;display:inline-block">
-                                <label for="input1" class="col-sm-0 control-label">History ID:</label>
-                                <input type="hidden" name="txtIndex" value="1">
-                                <input type="text" name="txtHistoryId" id="txtHistoryId" value="${empty param.txtHistoryId ? '' : param.txtHistoryId}" class="form-control"  placeholder="Input ID"/>
-                            </div>
-                            <div style="margin-right:30px;display:inline-block">
-                                <label for="input2" class="col-sm-0 control-label">Subject:</label>
-                                <input type="hidden" id="selectSubject" value="${param.txtSubject}">
-                                <select name="txtSubject" class="form-control">
-                                    <option value="0">-- Select One --</option>
-                                    <c:if test="${not empty applicationScope.SUBJECT}" >
-                                        <c:forEach var="subject" items="${applicationScope.SUBJECT}">
-                                            <option value="${subject.name}" ${param.txtSubject.equals(subject.name) ? 'selected' : ''}>${subject.name}</option>
-                                        </c:forEach>
-                                    </c:if>
-                                </select>
-                            </div>
-                        </div>
-
-                        <button type="submit" name="btnAction" class="btn btn-success" style="margin-left:4%">Search</button>
-                    </form>
-                    <hr/>
-                    <c:if test="${not empty requestScope.LIST}">
-                        <c:set var="list" value="${requestScope.LIST}"></c:set>
-                            <div class="row" style="margin-top:3%;overflow-y:auto;height:58vh;max-height:58vh">
+                    <c:if test="${not empty requestScope.DETAIL}">
+                        <c:set var="detail" value="${requestScope.DETAIL}"></c:set>
+                            <div class="row" style="overflow-y:auto;height:58vh;max-height:58vh;text-align:left">
                                 <div class="table-responsive">
                                     <table class="table table-hover">
                                         <thead>
                                             <tr>
                                                 <th>No.</th>
-                                                <th>History ID</th>
-                                                <th>Email</th>
-                                                <th>Subject ID</th>
-                                                <th>Start Time</th>
-                                                <th>End Time</th>
-                                                <th>Number Of Correct</th>
-                                                <th>Number Of InCorrect</th>
-                                                <th>Total</th>
-                                                <th>Detail</th>
+                                                <th>Question ID</th>
+                                                <th>Question Content</th>
+                                                <th>Choice ID</th>
+                                                <th>Choice Content</th>
+                                                <th>Correct</th>
+                                                <th>Point</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        <c:forEach var="item" items="${list}" varStatus="counter">
+                                        <c:forEach var="item" items="${detail}" varStatus="counter">
                                             <tr>
-                                                <td>${counter.count}</td>
-                                                <td>${item.historyId}</td>
-                                                <td>${item.email}</td>
-                                                <td>${item.subjectId}</td>
-                                                <td>${item.passStartTime()}</td>
-                                                <td>${item.passEndTime()}</td>
-                                                <td>${item.numOfCorrect}</td>
-                                                <td>${item.numOfInCorrect}</td>
-                                                <td>${item.total}</td>
-                                                <td>
-                                                    <form action="ViewDetailServlet" method="POST">
-                                                        <input type="hidden" name="txtHistoryId" value="${item.historyId}" />
-                                                        <input type="hidden" name="txtIndex" value="1" />
-                                                        <input type="hidden" name="txtIndex2" value="${param.txtIndex}" />
-                                                        <input type="hidden" name="txtSubject" value="${param.txtSubject}" />
-                                                        <button type="submit" name="btnAction" class="btn btn-danger">View</button>
-                                                    </form>
-                                                </td>
+                                                <td>${counter.count}<input type="hidden" name="txtHistoryId" id="txtHistoryId" value="${item.dto.historyId}"></td>
+                                                <td>${item.dto.questionId}</td>
+                                                <td>${item.questionContent}</td>
+                                                <td>${item.dto.choiceId}</td>
+                                                <td>${item.choiceContent}</td>
+                                                <td>${item.isCorrect ? '<span class=\'label label-success\'>Success</span>' : '<span class=\'label label-danger\'>Fail</span>'}</td>
+                                                <td>${item.point}</td>
                                             </tr>
                                         </c:forEach>
                                     </tbody>
@@ -174,15 +134,20 @@
                             </div>
                         </div>
                     </c:if>
-                    <c:if test="${empty requestScope.LIST &&  param.btnAction != null}">
+                    <c:if test="${empty requestScope.DETAIL &&  param.btnAction != null}">
                         <font color="red">No record found !!!</font>
                     </c:if>
                 </div>
             </div>
         </div>
         <c:if test="${not empty requestScope.PAGE && requestScope.PAGE > 1}">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="text-align:center">
-
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="text-align:center;position:relative">
+                <form action="SearchHistoryServlet" method="POST">
+                    <input type="hidden" name="txtHistoryId" value="${param.txtHistoryId}"/>
+                    <input type="hidden" name="txtSubject" value="${param.txtSubject}"/>
+                    <input type="hidden" name="txtIndex" value="${param.txtIndex2}"/>
+                    <button name="btnAction" class="btn btn-default">Back</button>
+                </form>
                 <ul class="pagination">
                     <li><a onClick="changeIndex(-1)" >&laquo;</a></li>
                         <c:forEach begin="1" end="${requestScope.PAGE}" step="1" varStatus="counter">

@@ -378,6 +378,9 @@
                                             <input type="hidden" name="txtSubjectId" value="${param.txtSubjectId}" />
                                             <input type="hidden" name="txtIndex" value="1"/>
                                             <button  type="submit" class="btn btn-primary" style="position:absolute;bottom:10%;left:43%">Take Quiz!!!</button>
+                                             <c:if test="${not empty param.txtMessage}">
+                                                <font color="red" >${param.txtMessage}</font>
+                                            </c:if>
                                         </form>
                                     </div>
 
@@ -457,7 +460,7 @@
                                                                 }
                                                             }
                                                         });
-                                                    }z
+                                                    }
         </script>
     </body>
 </html>

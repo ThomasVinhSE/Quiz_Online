@@ -137,8 +137,7 @@
                             <div style="margin-right:30px;display:inline-block">
                                 <label for="input2" class="col-sm-0 control-label">Subject:</label>
                                 <input type="hidden" id="selectSubject" value="${param.txtSubject}">
-                                <select name="txtSubject" class="form-control" required="required">
-                                    <option value="">-- Select One --</option>
+                                <select name="txtSubject" class="form-control">
                                     <c:if test="${not empty applicationScope.SUBJECT}" >
                                         <c:forEach var="subject" items="${applicationScope.SUBJECT}">
                                             <option value="${subject.name}" ${param.txtSubject.equals(subject.name) ? 'selected' : ''}>${subject.name}</option>
@@ -149,8 +148,7 @@
                             <div style="margin-right:30px;display:inline-block">
                                 <label for="input3" class="col-sm-0 control-label">Status:</label>
                                 <input type="hidden" id="selectActive" value="${param.txtStatus}">
-                                <select name="txtStatus" class="form-control" required="required">
-                                    <option value="">-- Select One --</option>
+                                <select name="txtStatus" class="form-control">
                                     <option value="1" ${param.txtStatus.equals('1') ? 'selected' : ''}>Active</option>
                                     <option value="0" ${param.txtStatus.equals('0') ? 'selected' : ''}>DeActive</option>
                                 </select>

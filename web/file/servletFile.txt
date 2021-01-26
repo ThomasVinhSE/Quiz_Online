@@ -10,3 +10,4 @@ SaveInforQuizServlet=SaveInforQuizServlet?student
 ExitQuizServlet=ExitQuizServlet?student
 SubmitServlet=SubmitServlet?student
 SearchHistoryServlet=SearchHistoryServlet?student
+ViewDetailServlet=ViewDetailServlet?student

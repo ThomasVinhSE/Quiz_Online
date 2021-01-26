@@ -56,7 +56,7 @@ public class TblQuestionDAO implements Serializable {
             cn = HelperUtil.makeConnection();
             if (cn != null) {
                 String sql = "Select count(questionId) as size from tbl_Question  "
-                        + "where question_content like '%" + questionName + "%' and subjectId = ? and status = ? ";
+                        + "where question_content like '%" + questionName + "%' or subjectId = ? or status = ? ";
                 pst = cn.prepareStatement(sql);
                 pst.setInt(1, subjectId);
                 pst.setBoolean(2, isActive);
@@ -69,7 +69,7 @@ public class TblQuestionDAO implements Serializable {
                 }
                 sql = "Select questionId,question_content,createDate,subjectId,point,status "
                         + "from tbl_Question "
-                        + "where question_content like '%" + questionName + "%' and subjectId = ? and status = ? "
+                        + "where question_content like '%" + questionName + "%' or subjectId = ? or status = ? "
                         + " order by createDate offset " + 10 * (index - 1) + " rows fetch next 10 rows only";
                 pst = cn.prepareStatement(sql);
                 pst.setInt(1, subjectId);
@@ -78,12 +78,13 @@ public class TblQuestionDAO implements Serializable {
                 TblChoiceDAO choiceDAO = null;
                 while (rs.next()) {
                     int questionId = rs.getInt("questionId");
+                    int idSubject = rs.getInt("subjectId");
                     String question_content = rs.getString("question_content");
                     Timestamp time = rs.getTimestamp("createDate");
                     Date date = new Date(time.getTime());
                     float point = rs.getFloat("point");
                     boolean status = rs.getBoolean("status");
-                    TblQuestionDTO dto = new TblQuestionDTO(questionId, question_content, date, subjectId, point, status);
+                    TblQuestionDTO dto = new TblQuestionDTO(questionId, question_content, date, idSubject, point, status);
 
                     if (choiceDAO == null) {
                         choiceDAO = new TblChoiceDAO();

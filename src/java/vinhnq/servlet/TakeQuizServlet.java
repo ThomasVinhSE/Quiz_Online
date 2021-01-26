@@ -62,9 +62,11 @@ public class TakeQuizServlet extends HttpServlet {
                     boolean check = false;
                     int time = -1;
                     int number = -1;
+                    String subject = "";
                     for (TblSubjectDTO tblSubjectDTO : list) {
                         int subjectId = tblSubjectDTO.getSubjectId();
                         if (subjectId == id) {
+                            subject = tblSubjectDTO.getName();
                             time = tblSubjectDTO.getTimeForQuiz();
                             number = tblSubjectDTO.getNumOfQuestion();
                             check = true;
@@ -76,15 +78,22 @@ public class TakeQuizServlet extends HttpServlet {
                         dao.getQuestionForMap2(id, number);
                         Map<TblQuestionDTO, List<TblChoiceDTO>> map = dao.getMap();
                         if (map != null) {
-                            HttpSession session = request.getSession(false);
-                            Set<Map.Entry<TblQuestionDTO, List<TblChoiceDTO>>> entrySet = map.entrySet();
-                            Map.Entry<TblQuestionDTO, List<TblChoiceDTO>>[] entry = entrySet.toArray(new Map.Entry[entrySet.size()]);
-                            session.setAttribute("START", new Date());
-                            session.setAttribute("QUIZ", entry);
-                            session.setAttribute("TIME", time);
-                            int page = PagingModel.getNumberOfPage(map.keySet().size(), 2);
-                            session.setAttribute("PAGE", page);
-                            url = HOME_PAGE;
+                            if (map.size() == number) {
+                                HttpSession session = request.getSession(false);
+                                Set<Map.Entry<TblQuestionDTO, List<TblChoiceDTO>>> entrySet = map.entrySet();
+                                Map.Entry<TblQuestionDTO, List<TblChoiceDTO>>[] entry = entrySet.toArray(new Map.Entry[entrySet.size()]);
+                                session.setAttribute("START", new Date());
+                                session.setAttribute("QUIZ", entry);
+                                session.setAttribute("TIME", time);
+                                int page = PagingModel.getNumberOfPage(map.keySet().size(), 2);
+                                session.setAttribute("PAGE", page);
+                                url = HOME_PAGE;
+                            } else {
+                                url = HOME_PAGE + "?txtSubjectId=" + txtSubjectId + "&txtNumber=" + number + "&txtTime=" + time
+                                        + "&isCheck=" + subject + "&txtMessage=" + "Not enough question to take quiz !!!";
+                                response.sendRedirect(url);
+                                url = null;
+                            }
                         } else {
                             request.setAttribute("MESSAGE", "Not found any question !!!");
                         }
@@ -107,8 +116,10 @@ public class TakeQuizServlet extends HttpServlet {
             log("SQL_TakeQuiz: " + ex.getMessage());
             request.setAttribute("MESSAGE", "Data conflict, try again !!!");
         } finally {
-            RequestDispatcher rd = request.getRequestDispatcher(url);
-            rd.forward(request, response);
+            if (url != null) {
+                RequestDispatcher rd = request.getRequestDispatcher(url);
+                rd.forward(request, response);
+            }
         }
     }
 

@@ -18,21 +18,19 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import vinhnq.tblaccount.TblAccountDTO;
-import vinhnq.tblhistory.TblHistoryDAO;
-import vinhnq.tblhistory.TblHistoryDTO;
+import vinhnq.detaihistory.DetailHistoryDAO;
+import vinhnq.detaihistory.DetailInfor;
 import vinhnq.utilities.PagingModel;
 
 /**
  *
  * @author Vinh
  */
-@WebServlet(name = "SearchHistoryServlet", urlPatterns = {"/SearchHistoryServlet"})
-public class SearchHistoryServlet extends HttpServlet {
+@WebServlet(name = "ViewDetailServlet", urlPatterns = {"/ViewDetailServlet"})
+public class ViewDetailServlet extends HttpServlet {
 
     private final String ERROR_PAGE = "error.jsp";
-    private final String HISTORY_PAGE = "history.jsp";
+    private final String DETAIL_PAGE = "detail.jsp";
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -49,29 +47,27 @@ public class SearchHistoryServlet extends HttpServlet {
         String url = ERROR_PAGE;
         try {
             String txtHistoryId = request.getParameter("txtHistoryId");
-            String txtSubject = request.getParameter("txtSubject");
             String txtIndex = request.getParameter("txtIndex");
-            boolean isValid = (txtHistoryId != null && txtSubject != null && txtIndex != null) ? true : false;
-            if (isValid) {
-                HttpSession session = request.getSession(false);
-                String email = ((TblAccountDTO)session.getAttribute("ACCOUNT")).getEmail();
+            if (txtHistoryId != null && txtIndex != null) {
                 int index = Integer.parseInt(txtIndex);
-                TblHistoryDAO historyDAO = new TblHistoryDAO();
-                int size = historyDAO.getDataForList(email,txtHistoryId, txtSubject,10,index);
-                List<TblHistoryDTO> list = historyDAO.getList();
-                request.setAttribute("LIST", list);
+                DetailHistoryDAO dao = new DetailHistoryDAO();
+                int size = dao.getAllListDetail(txtHistoryId,10,index);
+                List<DetailInfor> allListDetail = dao.getList();
+                
+                request.setAttribute("DETAIL", allListDetail);
                 int page = PagingModel.getNumberOfPage(size, 10);
                 request.setAttribute("PAGE", page);
-                url = HISTORY_PAGE;
+                url = DETAIL_PAGE;
             } else {
-                request.setAttribute("MESSAGE", "Some input field was lost");
+                request.setAttribute("MESSAGE", "HistoryId was lost");
             }
         } catch (NamingException ex) {
-            log("Naming_SearchHistory: " + ex.getMessage());
-            request.setAttribute("MESSAGE", "System have error, try again !!!");
+            log("Naming_ViewDetail: " + ex.getMessage());
+            request.setAttribute("MESSAGE", "System occured error,try again !!!");
+
         } catch (SQLException ex) {
-            log("SQL_SearchHistory: " + ex.getMessage());
-            request.setAttribute("MESSAGE", "Data conflict, try again !!!");
+            log("SQL_ViewDetail: " + ex.getMessage());
+            request.setAttribute("MESSAGE", "Data conflict,try again !!!");
         } finally {
             RequestDispatcher rd = request.getRequestDispatcher(url);
             rd.forward(request, response);

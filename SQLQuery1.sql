@@ -56,5 +56,13 @@ create table tbl_History
 	total float
 )
 
+create table Detail_History
+(
+	historyId int foreign key references tbl_History(historyId),
+	choiceId int null foreign key references tbl_Choice(choiceId),
+	questionId int foreign key references tbl_Question(questionId),
+	primary key (historyId,questionId)
+)
 
-
+delete from tbl_History
+delete from Detail_History

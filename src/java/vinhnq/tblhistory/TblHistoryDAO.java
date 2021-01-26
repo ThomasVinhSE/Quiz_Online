@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.naming.NamingException;
+import vinhnq.detaihistory.DetailInfor;
 import vinhnq.utilities.HelperUtil;
 
 /**
@@ -32,7 +33,29 @@ public class TblHistoryDAO implements Serializable {
         this.list = list;
     }
     
-    
+    public int getNextId(Connection cn) throws NamingException,SQLException
+    {
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+        int index = -1;
+        try
+        {
+            if(cn != null)
+            {
+                String sql = "Select max(historyId) as max from tbl_History";
+                pst = cn.prepareStatement(sql);
+                rs = pst.executeQuery();
+                if(rs.next())
+                {
+                    index = rs.getInt("max");
+                }
+            }
+        }
+        finally{
+            closeConnection(null, pst, rs);
+        }
+        return index;
+    }
     private void closeConnection(Connection cn,PreparedStatement pst,ResultSet rs) throws SQLException
     {
         if(rs != null)
@@ -42,8 +65,8 @@ public class TblHistoryDAO implements Serializable {
         if(cn != null)
             cn.close();
     }
-    
-    public int getDataForList(String historyId,String subject,int limit,int index) throws NamingException,SQLException
+
+    public int getDataForList(String email,String historyId,String subject,int limit,int index) throws NamingException,SQLException
     {
         Connection cn = null;
         PreparedStatement pst = null;
@@ -55,14 +78,15 @@ public class TblHistoryDAO implements Serializable {
             if(cn != null)
             {
                 String sql = "Select count(a.historyId) as size from tbl_History a,tbl_Subject b "
-                        + "where a.subjectId = b.subjectId and (a.historyId like ? or b.name like ?) ";
+                        + "where a.subjectId = b.subjectId and email = ? and (a.historyId like ? or b.name like ?) ";
                       
                 pst = cn.prepareStatement(sql);
-                pst.setString(1, "%"+historyId+"%");
+                pst.setString(1, email);
+                pst.setString(2, "%"+historyId+"%");
                 if(subject.equals("0"))
-                    pst.setString(2, "%");
+                    pst.setString(3, "%");
                 else
-                    pst.setString(2, "%"+subject+"%");
+                    pst.setString(3, "%"+subject+"%");
                 rs = pst.executeQuery();
                 if(rs.next())
                 {
@@ -72,21 +96,21 @@ public class TblHistoryDAO implements Serializable {
                 }
                 sql = "Select a.historyId,a.email,a.subjectId,a.startTime,a.endTime,a.numOfCorrect,"
                         + "a.numOfInCorrect,a.total from tbl_History a,tbl_Subject b "
-                        + "where a.subjectId = b.subjectId and (a.historyId like ? or b.name like ?) "
+                        + "where a.subjectId = b.subjectId and email = ? and (a.historyId like ? or b.name like ?) "
                         + "order by a.startTime "
                         + "offset "+limit*(index-1)+" rows "
                         +"fetch next "+limit+" rows only";
                 pst = cn.prepareStatement(sql);
-                pst.setString(1, "%"+historyId+"%");
+                pst.setString(1, email);
+                pst.setString(2, "%"+historyId+"%");
                 if(subject.equals("0"))
-                    pst.setString(2, "%");
+                    pst.setString(3, "%");
                 else
-                    pst.setString(2, "%"+subject+"%");
+                    pst.setString(3, "%"+subject+"%");
                 rs = pst.executeQuery();
                 while(rs.next())
                 {
                    int id = rs.getInt("historyId");
-                   String email = rs.getString("email");
                    int subjectId = rs.getInt("subjectId");
                    Timestamp time = rs.getTimestamp("startTime");
                    Date startTime = new Date(time.getTime());
@@ -107,15 +131,14 @@ public class TblHistoryDAO implements Serializable {
         }
         return size;
     }
-    public boolean addHistory(String email,int subjectId,Date startTime,Date endTime,int numOfCorrect,int numOfIncorrect,float total) throws NamingException,SQLException
+    public boolean addHistory(Connection cn,String email,int subjectId,Date startTime,Date endTime,int numOfCorrect,int numOfIncorrect,float total) throws NamingException,SQLException
     {
+        
         boolean result = false;
-        Connection cn = null;
         PreparedStatement pst = null;
         
         try
         {
-            cn = HelperUtil.makeConnection();
             if(cn != null)
             {
                 String sql = "Insert into tbl_History(email,subjectId,startTime,endTime,numOfCorrect,numOfInCorrect,total) "
@@ -135,7 +158,7 @@ public class TblHistoryDAO implements Serializable {
             }
         }
         finally{
-            closeConnection(cn, pst, null);
+            closeConnection(null, pst, null);
         }
         return result;
     }
