@@ -6,7 +6,6 @@
 package vinhnq.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -46,6 +45,7 @@ public class ExitQuizServlet extends HttpServlet {
                 session.removeAttribute("TIME");
                 session.removeAttribute("START");
                 session.removeAttribute("RESULT");
+                session.removeAttribute("TIMEINIT");
                 url = HOME_PAGE;
             }
         }

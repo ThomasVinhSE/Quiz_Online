@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.naming.NamingException;
-import vinhnq.detaihistory.DetailInfor;
 import vinhnq.utilities.HelperUtil;
 
 /**

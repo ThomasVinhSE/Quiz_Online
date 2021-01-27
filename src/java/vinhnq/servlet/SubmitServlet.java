@@ -6,17 +6,13 @@
 package vinhnq.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.naming.NamingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -65,7 +61,8 @@ public class SubmitServlet extends HttpServlet {
                 Date startTime = (Date) session.getAttribute("START");
                 String txtTimeQuiz = request.getParameter("txtTimeQuiz");
                 float time = txtTimeQuiz != null ? Float.parseFloat(txtTimeQuiz) : 1;
-                int timeInMilisecond = (60 * 60 - (int) Math.floor(time * 60)) * 1000;
+                int timeInit = (Integer) session.getAttribute("INITTIME");
+                int timeInMilisecond = (timeInit * 60 - (int) Math.floor(time * 60)) * 1000;
                 Date endTime = new Date(startTime.getTime() + timeInMilisecond);
                 float total = 0;
                 int numberOfCorrect = 0;

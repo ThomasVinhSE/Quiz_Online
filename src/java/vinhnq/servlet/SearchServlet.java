@@ -6,12 +6,9 @@
 package vinhnq.servlet;
 
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.util.Pair;
 import javax.naming.NamingException;
 import javax.servlet.RequestDispatcher;

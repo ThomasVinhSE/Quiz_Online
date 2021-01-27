@@ -8,4 +8,3 @@ update.jsp=update.jsp?admin
 delete.jsp=delete.jsp?admin
 home.jsp=home.jsp?student
 history.jsp=history.jsp?student
-detail.jsp=detail.jsp?student

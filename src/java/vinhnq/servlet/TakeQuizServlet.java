@@ -11,8 +11,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.naming.NamingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -87,6 +85,7 @@ public class TakeQuizServlet extends HttpServlet {
                                 session.setAttribute("TIME", time);
                                 int page = PagingModel.getNumberOfPage(map.keySet().size(), 2);
                                 session.setAttribute("PAGE", page);
+                                session.setAttribute("INITTIME", time);
                                 url = HOME_PAGE;
                             } else {
                                 url = HOME_PAGE + "?txtSubjectId=" + txtSubjectId + "&txtNumber=" + number + "&txtTime=" + time
