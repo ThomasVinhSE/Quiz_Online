@@ -59,10 +59,8 @@ public class SubmitServlet extends HttpServlet {
                 TblAccountDTO account = (TblAccountDTO) session.getAttribute("ACCOUNT");
                 Map.Entry<TblQuestionDTO, List<TblChoiceDTO>>[] entry = (Map.Entry<TblQuestionDTO, List<TblChoiceDTO>>[]) session.getAttribute("QUIZ");
                 Date startTime = (Date) session.getAttribute("START");
-                String txtTimeQuiz = request.getParameter("txtTimeQuiz");
-                float time = txtTimeQuiz != null ? Float.parseFloat(txtTimeQuiz) : 1;
-                int timeInit = (Integer) session.getAttribute("INITTIME");
-                int timeInMilisecond = (timeInit * 60 - (int) Math.floor(time * 60)) * 1000;
+                long time = (long) session.getAttribute("TIME");
+                long timeInMilisecond = time*1000;
                 Date endTime = new Date(startTime.getTime() + timeInMilisecond);
                 float total = 0;
                 int numberOfCorrect = 0;
@@ -123,6 +121,7 @@ public class SubmitServlet extends HttpServlet {
                         session.removeAttribute("PAGE");
                         session.removeAttribute("TIME");
                         session.removeAttribute("START");
+                        session.removeAttribute("INITTIME");
                         TblHistoryDTO dto = new TblHistoryDTO(-1, account.getEmail(), subjectId, startTime, endTime, numberOfCorrect, numberOfInCorrect, total);
                         session.setAttribute("RESULT", dto);
                     }

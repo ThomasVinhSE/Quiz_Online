@@ -6,6 +6,7 @@
 package vinhnq.servlet;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.RequestDispatcher;
@@ -52,13 +53,14 @@ public class SaveInforQuizServlet extends HttpServlet {
                     String rdOption2 = request.getParameter("rdOption2");
                     String question1 = request.getParameter("questionId1");
                     String question2 = request.getParameter("questionId2");
-                    String txtTime = request.getParameter("txtTimeQuiz");
                     int page = Integer.parseInt(txtPage);
                     int index = 2 * (page - 1);
                     if (index < 0 || index >= entry.length) {
                         request.setAttribute("MESSAGE", "Select index out of range");
                     } else {
-                        float time = txtTime != null ? Float.parseFloat(txtTime) : 1;
+                        Date realTime = (Date) session.getAttribute("START");
+                        Date currentDate = new Date();
+                        long time = (currentDate.getTime() - realTime.getTime())/1000;
                         session.setAttribute("TIME", time);
                         if (question1 != null) {
                             int option1 = rdOption1 != null ? Integer.parseInt(rdOption1) : 0;
@@ -93,7 +95,7 @@ public class SaveInforQuizServlet extends HttpServlet {
                         }
                         if (request.getParameter("isSubmit") != null) {
                             url = null;
-                            response.sendRedirect(SUBMIT_SERVLET+"?txtTimeQuiz="+(request.getParameter("txtTimeQuiz") != null ? request.getParameter("txtTimeQuiz") : ""));
+                            response.sendRedirect(SUBMIT_SERVLET);
                         }
                     }
 

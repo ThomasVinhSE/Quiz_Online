@@ -123,7 +123,7 @@
                                                 <td>${counter.count}<input type="hidden" name="txtHistoryId" id="txtHistoryId" value="${item.dto.historyId}"></td>
                                                 <td>${item.dto.questionId}</td>
                                                 <td>${item.questionContent}</td>
-                                                <td>${item.dto.choiceId}</td>
+                                                <td>${item.dto.choiceId == 78 ? '' : item.dto.choiceId}</td>
                                                 <td>${item.choiceContent}</td>
                                                 <td>${item.isCorrect ? '<span class=\'label label-success\'>Success</span>' : '<span class=\'label label-danger\'>Fail</span>'}</td>
                                                 <td>${item.point}</td>

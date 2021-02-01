@@ -37,10 +37,6 @@
                         .attr("type", "hidden")
                         .attr("name", "txtIndex").val(index);
                 $('#form-quiz').append(input);
-                var input = $("<input>")
-                        .attr("type", "hidden")
-                        .attr("name", "txtTimeQuiz").val(time / 60.0);
-                $('#form-quiz').append(input);
                 $('#form-quiz').submit();
             }
             function focusTag()
@@ -412,8 +408,8 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-confirm/3.3.2/jquery-confirm.min.js"></script>
         <script>
 
-                                                    const beginMinutes = ${empty sessionScope.TIME ? 0 : sessionScope.TIME};
-                                                    let time = beginMinutes * 60;
+                                                    const beginMinutes = ${empty sessionScope.INITTIME ? 0 : sessionScope.INITTIME};
+                                                    let time = beginMinutes * 60 - ${empty sessionScope.TIME ? 0 : sessionScope.TIME};
                                                     function setTimer()
                                                     {
                                                         const minutes = Math.floor(time / 60);
@@ -422,13 +418,9 @@
                                                         time--;
                                                         if (time === 0)
                                                         {
-                                                            var input1 = $("<input>")
-                                                                    .attr("type", "hidden")
-                                                                    .attr("name", "txtTimeQuiz").val(time / 60.0);
                                                             var input2 = $("<input>")
                                                                     .attr("type", "hidden")
                                                                     .attr("name", "isSubmit").val('true');
-                                                            $('#form-quiz').append(input1);
                                                             $('#form-quiz').append(input2);
                                                             $('#form-quiz').submit();
                                                             return;
@@ -445,13 +437,9 @@
                                                                 delete: {
                                                                     text: 'Submit',
                                                                     action: function () {
-                                                                        var input1 = $("<input>")
-                                                                                .attr("type", "hidden")
-                                                                                .attr("name", "txtTimeQuiz").val(time / 60.0);
                                                                         var input2 = $("<input>")
                                                                                 .attr("type", "hidden")
                                                                                 .attr("name", "isSubmit").val('true');
-                                                                        $('#form-quiz').append(input1);
                                                                         $('#form-quiz').append(input2);
                                                                         $('#form-quiz').submit();
                                                                     }

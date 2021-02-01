@@ -80,9 +80,10 @@ public class TakeQuizServlet extends HttpServlet {
                                 HttpSession session = request.getSession(false);
                                 Set<Map.Entry<TblQuestionDTO, List<TblChoiceDTO>>> entrySet = map.entrySet();
                                 Map.Entry<TblQuestionDTO, List<TblChoiceDTO>>[] entry = entrySet.toArray(new Map.Entry[entrySet.size()]);
+                                Date realTime = new Date();
                                 session.setAttribute("START", new Date());
                                 session.setAttribute("QUIZ", entry);
-                                session.setAttribute("TIME", time);
+                                session.setAttribute("TIME", 0);
                                 int page = PagingModel.getNumberOfPage(map.keySet().size(), 2);
                                 session.setAttribute("PAGE", page);
                                 session.setAttribute("INITTIME", time);
