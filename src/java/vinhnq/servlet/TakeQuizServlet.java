@@ -51,60 +51,70 @@ public class TakeQuizServlet extends HttpServlet {
         String url = ERROR_PAGE;
         String txtSubjectId = request.getParameter("txtSubjectId");
         try {
-            boolean isValid = (txtSubjectId != null) ? true : false;
-            if (isValid) {
-                int id = Integer.parseInt(txtSubjectId);
-                ServletContext context = request.getServletContext();
-                List<TblSubjectDTO> list = (List<TblSubjectDTO>) context.getAttribute("SUBJECT");
-                if (list != null) {
-                    boolean check = false;
-                    int time = -1;
-                    int number = -1;
-                    String subject = "";
-                    for (TblSubjectDTO tblSubjectDTO : list) {
-                        int subjectId = tblSubjectDTO.getSubjectId();
-                        if (subjectId == id) {
-                            subject = tblSubjectDTO.getName();
-                            time = tblSubjectDTO.getTimeForQuiz();
-                            number = tblSubjectDTO.getNumOfQuestion();
-                            check = true;
-                            break;
-                        }
-                    }
-                    if (check) {
-                        TblQuestionDAO dao = new TblQuestionDAO();
-                        dao.getQuestionForMap2(id, number);
-                        Map<TblQuestionDTO, List<TblChoiceDTO>> map = dao.getMap();
-                        if (map != null) {
-                            if (map.size() == number) {
-                                HttpSession session = request.getSession(false);
-                                Set<Map.Entry<TblQuestionDTO, List<TblChoiceDTO>>> entrySet = map.entrySet();
-                                Map.Entry<TblQuestionDTO, List<TblChoiceDTO>>[] entry = entrySet.toArray(new Map.Entry[entrySet.size()]);
-                                Date realTime = new Date();
-                                session.setAttribute("START", new Date());
-                                session.setAttribute("QUIZ", entry);
-                                session.setAttribute("TIME", 0);
-                                int page = PagingModel.getNumberOfPage(map.keySet().size(), 2);
-                                session.setAttribute("PAGE", page);
-                                session.setAttribute("INITTIME", time);
-                                url = HOME_PAGE;
+            HttpSession session = request.getSession(false);
+            if (session != null) {
+                if (session.getAttribute("QUIZ") != null) {
+                    Date realTime = (Date) session.getAttribute("START");
+                    Date currentDate = new Date();
+                    long time = (currentDate.getTime() - realTime.getTime()) / 1000;
+                    session.setAttribute("TIME", time);
+                    url = HOME_PAGE;
+                } else {
+                    boolean isValid = (txtSubjectId != null) ? true : false;
+                    if (isValid) {
+                        int id = Integer.parseInt(txtSubjectId);
+                        ServletContext context = request.getServletContext();
+                        List<TblSubjectDTO> list = (List<TblSubjectDTO>) context.getAttribute("SUBJECT");
+                        if (list != null) {
+                            boolean check = false;
+                            int time = -1;
+                            int number = -1;
+                            String subject = "";
+                            for (TblSubjectDTO tblSubjectDTO : list) {
+                                int subjectId = tblSubjectDTO.getSubjectId();
+                                if (subjectId == id) {
+                                    subject = tblSubjectDTO.getName();
+                                    time = tblSubjectDTO.getTimeForQuiz();
+                                    number = tblSubjectDTO.getNumOfQuestion();
+                                    check = true;
+                                    break;
+                                }
+                            }
+                            if (check) {
+                                TblQuestionDAO dao = new TblQuestionDAO();
+                                dao.getQuestionForMap2(id, number);
+                                Map<TblQuestionDTO, List<TblChoiceDTO>> map = dao.getMap();
+                                if (map != null) {
+                                    if (map.size() == number) {
+                                        Set<Map.Entry<TblQuestionDTO, List<TblChoiceDTO>>> entrySet = map.entrySet();
+                                        Map.Entry<TblQuestionDTO, List<TblChoiceDTO>>[] entry = entrySet.toArray(new Map.Entry[entrySet.size()]);
+                                        Date realTime = new Date();
+                                        session.setAttribute("START", new Date());
+                                        session.setAttribute("QUIZ", entry);
+                                        session.setAttribute("TIME", 0);
+                                        int page = PagingModel.getNumberOfPage(map.keySet().size(), 2);
+                                        session.setAttribute("PAGE", page);
+                                        session.setAttribute("INITTIME", time);
+                                        url = HOME_PAGE;
+                                    } else {
+                                        url = HOME_PAGE + "?txtSubjectId=" + txtSubjectId + "&txtNumber=" + number + "&txtTime=" + time
+                                                + "&isCheck=" + subject + "&txtMessage=" + "Not enough question to take quiz !!!";
+                                        response.sendRedirect(url);
+                                        url = null;
+                                    }
+                                } else {
+                                    request.setAttribute("MESSAGE", "Not found any question !!!");
+                                }
                             } else {
-                                url = HOME_PAGE + "?txtSubjectId=" + txtSubjectId + "&txtNumber=" + number + "&txtTime=" + time
-                                        + "&isCheck=" + subject + "&txtMessage=" + "Not enough question to take quiz !!!";
-                                response.sendRedirect(url);
-                                url = null;
+                                request.setAttribute("MESSAGE", "Not found by subjectId");
                             }
                         } else {
-                            request.setAttribute("MESSAGE", "Not found any question !!!");
+                            request.setAttribute("MESSAGE", "No subject current in system");
                         }
                     } else {
-                        request.setAttribute("MESSAGE", "Not found by subjectId");
+                        request.setAttribute("MESSAGE", "SubjectId input field was lost, try again !!!");
                     }
-                } else {
-                    request.setAttribute("MESSAGE", "No subject current in system");
                 }
-            } else {
-                request.setAttribute("MESSAGE", "SubjectId input field was lost, try again !!!");
             }
         } catch (NumberFormatException e) {
             log("NumberFormat_TakeQuiz: " + e.getMessage());

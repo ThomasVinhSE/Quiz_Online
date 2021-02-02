@@ -78,7 +78,7 @@ public class SaveInforQuizServlet extends HttpServlet {
                             }
 
                         }
-                        if (rdOption2 != null && question2 != null) {
+                        if (question2 != null) {
                             int option2 = rdOption2 != null ? Integer.parseInt(rdOption2) : 0;
                             int idForSecond = Integer.parseInt(question2);
                             if (option2 > 4 || option2 < 0) {
@@ -97,6 +97,7 @@ public class SaveInforQuizServlet extends HttpServlet {
                             url = null;
                             response.sendRedirect(SUBMIT_SERVLET);
                         }
+                       
                     }
 
                 } else {

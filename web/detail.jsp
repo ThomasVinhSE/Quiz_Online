@@ -32,7 +32,7 @@
                 let historyId = document.getElementById('txtHistoryId').value;
 
                 historyId = historyId.trim().replace(/\s\s+/g, ' ');
-                window.location.replace("ViewDetailServlet?btnAction=" + "&txtHistoryId=" + historyId + "&txtIndex=" + index+"&txtIndex2=${param.txtIndex2}"+"&txtSubject=${param.txtSubject}");
+                window.location.replace("ViewDetailServlet?btnAction=" + "&txtHistoryId=" + historyId + "&txtIndex=" + index + "&txtIndex2=${param.txtIndex2}" + "&txtSubject=${param.txtSubject}");
             }
             function focusTag()
             {
@@ -140,14 +140,14 @@
                 </div>
             </div>
         </div>
-        <c:if test="${not empty requestScope.PAGE && requestScope.PAGE > 1}">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="text-align:center;position:relative">
-                <form action="SearchHistoryServlet" method="POST">
-                    <input type="hidden" name="txtHistoryId" value="${param.txtHistoryId}"/>
-                    <input type="hidden" name="txtSubject" value="${param.txtSubject}"/>
-                    <input type="hidden" name="txtIndex" value="${param.txtIndex2}"/>
-                    <button name="btnAction" class="btn btn-default">Back</button>
-                </form>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="text-align:center;position:relative">
+            <form action="SearchHistoryServlet" method="POST">
+                <input type="hidden" name="txtHistoryId" value="${param.txtHistoryId}"/>
+                <input type="hidden" name="txtSubject" value="${param.txtSubject}"/>
+                <input type="hidden" name="txtIndex" value="${param.txtIndex2}"/>
+                <button name="btnAction" class="btn btn-default">Back</button>
+            </form>
+            <c:if test="${not empty requestScope.PAGE && requestScope.PAGE > 1}">
                 <ul class="pagination">
                     <li><a onClick="changeIndex(-1)" >&laquo;</a></li>
                         <c:forEach begin="1" end="${requestScope.PAGE}" step="1" varStatus="counter">
@@ -155,8 +155,8 @@
                         </c:forEach>
                     <li><a onClick="changeIndex(-2)" >&raquo;</a></li>
                 </ul>
-            </div>
-        </c:if>
+            </c:if>
+        </div>
         <script src="framework/js/jquery-3.2.1.min.js"></script>
         <script src="framework/js/bootstrap.min.js"></script>
 
