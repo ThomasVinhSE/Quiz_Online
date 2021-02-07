@@ -58,7 +58,13 @@ public class ViewDetailServlet extends HttpServlet {
             } else {
                 request.setAttribute("MESSAGE", "HistoryId was lost");
             }
-        } catch (NamingException ex) {
+        }
+        catch(NumberFormatException e)
+        {
+            log("Number_SearchHistory: " + e.getMessage());
+            request.setAttribute("MESSAGE", "Some field is not a number !!!");
+        }
+        catch (NamingException ex) {
             log("Naming_ViewDetail: " + ex.getMessage());
             request.setAttribute("MESSAGE", "System occured error,try again !!!");
 

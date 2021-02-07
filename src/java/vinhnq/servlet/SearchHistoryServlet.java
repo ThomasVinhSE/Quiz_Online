@@ -63,7 +63,12 @@ public class SearchHistoryServlet extends HttpServlet {
             } else {
                 request.setAttribute("MESSAGE", "Some input field was lost");
             }
-        } catch (NamingException ex) {
+        }catch(NumberFormatException e)
+        {
+            log("Number_SearchHistory: " + e.getMessage());
+            request.setAttribute("MESSAGE", "Some field is not a number !!!");
+        }
+        catch (NamingException ex) {
             log("Naming_SearchHistory: " + ex.getMessage());
             request.setAttribute("MESSAGE", "System have error, try again !!!");
         } catch (SQLException ex) {
