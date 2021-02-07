@@ -10,15 +10,10 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Error Page</title>
-        <link href="framework/css/bootstrap.min.css" rel="stylesheet">
-        <link rel="stylesheet" href="framework/css/font-awesome.min.css">
+        <title>Not Found Page</title>
         <style>
             body {
-                background-image: url('images/error.png');
-                background-size:cover;
-                background-position-y: 5px;
-                position:relative;
+                
             }
             h1 {
                 color:white;
@@ -30,12 +25,7 @@
         </style>
     </head>
     <body>
-        <div>
-        <h1>${requestScope.MESSAGE}</h1>
         <c:set var="ACCOUNT" value="${null}" scope="session"/>
         <button class="btn btn-success" onClick="window.location.replace('/Assignment2_NguyenQuocVinh')">Back</button>
-        </div>
-        <script src="framework/js/jquery-3.2.1.min.js"></script>
-        <script src="framework/js/bootstrap.min.js"></script>
     </body>
 </html>
