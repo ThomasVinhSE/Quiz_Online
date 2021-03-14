@@ -91,7 +91,7 @@ public class HelperUtil implements Serializable {
                 }
             }
             else
-                System.out.println("Not Exits");
+                System.out.println("File not Exits");
             
         } finally {
             if (br != null) {
