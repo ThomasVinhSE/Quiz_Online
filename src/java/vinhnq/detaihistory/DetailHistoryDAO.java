@@ -23,6 +23,7 @@ public class DetailHistoryDAO implements Serializable {
 
     private List<DetailInfor> list;
     private String test;
+    private String tes1t;
     public List<DetailInfor> getList() {
         return list;
     }
