@@ -22,6 +22,7 @@ import vinhnq.utilities.HelperUtil;
 public class DetailHistoryDAO implements Serializable {
 
     private List<DetailInfor> list;
+    private List<DetailInfor> list1;
     
     public List<DetailInfor> getList() {
         return list;
