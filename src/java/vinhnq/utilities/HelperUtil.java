@@ -31,6 +31,7 @@ import javax.sql.DataSource;
 public class HelperUtil implements Serializable {
 
     private static final String MEDIA_FILE = "file/mediaFile.txt";
+    private static final String MEDIA_FILE1 = "file/mediaFile.txt";
     private static final String JSP_FILE = "file/jspFile.txt";
     private static final String SERVLET_FILE = "file/servletFile.txt";
     
