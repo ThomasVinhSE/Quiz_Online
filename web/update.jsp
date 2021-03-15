@@ -111,7 +111,7 @@
 
                             <div class="form-group" style="text-align:left;">
                                 <div style="width:28%;float:left">
-                                    <img src="images/pencil.jpg" style="width:100%;height: inherit;" />
+                                    <img src="images/pencil.jpg" style="width:100%;height: inherit;" alt="Test" />
                                 </div>
                                 <div style="width:72%;float:right;padding-left:0">
                                     <div class="radio">
