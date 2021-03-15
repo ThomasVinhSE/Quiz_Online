@@ -162,7 +162,7 @@
                         <c:set var="map" value="${requestScope.MAP}"></c:set>
                             <div class="row" style="margin-top:3%;overflow-y:auto;height:58vh;max-height:58vh">
                                 <div class="table-responsive">
-                                    <table class="table table-hover" style="border-collapse:collapse;">
+                                    <table class="table table-hover" aria-label="test" style="border-collapse:collapse;">
                                         <thead>
                                             <tr>
                                                 <th>No.</th>
