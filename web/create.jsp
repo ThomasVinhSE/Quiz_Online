@@ -26,6 +26,7 @@
         </style>
     </head>
     <body>
+        <img src=""/>
         <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
             <a class="navbar-brand" style="color:blue"><font style="font-size:20px;color:black">Welcome</font> ${sessionScope.ACCOUNT.name} 
                 <label class="label label-danger" style="font-size:10px;vertical-align:10px;">admin</label>
